@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-###############################################################################
+################################################################################
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Vishnu K P (odoo@cybrosys.com)
+#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author: Unnimaya C O (odoo@cybrosys.com)
 #
 #    You can modify it under the terms of the GNU LESSER
 #    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
@@ -18,7 +18,7 @@
 #    (LGPL v3) along with this program.
 #    If not, see <http://www.gnu.org/licenses/>.
 #
-###############################################################################
+################################################################################
 from odoo import api, fields, models, tools
 
 
@@ -50,40 +50,44 @@ class FleetBookingLine(models.Model):
                              default=_get_default_uom_id, help="This will set "
                                                                "the unit of"
                                                                " measure used")
-    price_unit = fields.Float(string='Rent/KM',
-                              related='fleet_id.price_per_km',
+    price_unit = fields.Float(string='Rent/KM', related='fleet_id.price_per_km',
                               digits='Product Price',
                               help="The rent/km of the selected fleet.")
     tax_ids = fields.Many2many('account.tax',
                                'hotel_fleet_order_line_taxes_rel',
                                'fleet_id',
                                'tax_id', string='Taxes',
-                               help="Default taxes used when renting the fleet"
+                               help="Default taxes used when renting the fleet "
                                     "models.",
                                domain=[('type_tax_use', '=', 'sale')])
     currency_id = fields.Many2one(
         related='booking_id.pricelist_id.currency_id',
-        string="Currency", help='The currency used')
-    price_subtotal = fields.Float(string="Subtotal",
-                                  compute='_compute_price_subtotal',
-                                  help="Total price excluding tax",
-                                  store=True)
-    price_tax = fields.Float(string="Total Tax",
-                             compute='_compute_price_subtotal',
-                             help="Total tax amount",
-                             store=True)
-    price_total = fields.Float(string="Total",
-                               compute='_compute_price_subtotal',
-                               help="Total Price Including Tax",
-                               store=True)
-    state = fields.Selection(related='booking_id.state',
-                             string="Order Status",
-                             help=" Status of the Order",
-                             copy=False)
+        string="Currency",
+        help='The currency used')
+    price_subtotal = fields.Float(
+        string="Subtotal",
+        compute='_compute_price_subtotal', help="Total price excluding tax",
+        store=True)
+    price_tax = fields.Float(
+        string="Total Tax",
+        compute='_compute_price_subtotal', help="Total tax amount",
+        store=True)
+    price_total = fields.Float(
+        string="Total",
+        compute='_compute_price_subtotal',
+        help="Total Price Including Tax",
+        store=True)
+    state = fields.Selection(
+        related='booking_id.state',
+        string="Order Status",
+        help=" Status of the Order",
+        copy=False)
 
     @api.depends('uom_qty', 'price_unit', 'tax_ids')
     def _compute_price_subtotal(self):
-        """Compute the amounts of the room booking line."""
+        """
+        Compute the amounts of the room booking line.
+        """
         for line in self:
             tax_results = self.env['account.tax']._compute_taxes(
                 [line._convert_to_tax_base_line_dict()])

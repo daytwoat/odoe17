@@ -53,7 +53,7 @@ Best Regards,
             <field name="body_html"><![CDATA[
 <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
     
-    <p>Dear <t t-out="object.name"/>,</p>
+    <p>Dear <t t-out="object.name" />,</p>
    <p>
     We are disappointed to see that despite sending a reminder, that your account is now seriously overdue.
 It is essential that immediate payment is made, otherwise we will have to consider placing a stop on your account
@@ -85,15 +85,15 @@ Best Regards,
         <record id="email_template_om_account_followup_level2" model="mail.template">
             <field name="name">Urging payment follow-up reminder email</field>
             <field name="email_from">{{ (user.email or '') }}</field>
-            <field name="subject">{{ user.company_id.name }} Payment Reminder</field>
-            <field name="email_to">{{ object.email }}</field>
+            <field name="subject">{{ user.company_id.name }}Payment Reminder</field>
+            <field name="email_to">{{ object.email }</field>
             <field name="lang">{{ object.lang }}</field>
             <field name="model_id" ref="base.model_res_partner"/>
             <field name="auto_delete" eval="True"/>
             <field name="body_html"><![CDATA[
 <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
     
-    <p>Dear <t t-out="object.name"/>,</p>
+    <p>Dear <t t-out="object.name" />,</p>
     <p>
     Despite several reminders, your account is still not settled.
 Unless full payment is made in next 8 days, legal action for the recovery of the debt will be taken without
@@ -121,7 +121,7 @@ Best Regards,
         <!-- Default follow up message -->
         <record id="email_template_om_account_followup_default" model="mail.template">
             <field name="name">Default payment follow-up reminder e-mail</field>
-            <field name="email_from">{{ (user.email or '') }}</field>
+            <field name="email_from">{{ (user.email or '') }</field>
             <field name="subject">{{ user.company_id.name }} Payment Reminder</field>
             <field name="email_to">{{ object.email }}</field>
             <field name="lang">{{ object.lang }}</field>
@@ -130,7 +130,7 @@ Best Regards,
             <field name="body_html"><![CDATA[
 <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
     
-    <p>Dear <t t-out="object.name"/>,</p>
+    <p>Dear <t t-out="object.name" />,</p>
     <p>
     Exception made if there was a mistake of ours, it seems that the following amount stays unpaid. Please, take
 appropriate measures in order to carry out this payment in the next 8 days.

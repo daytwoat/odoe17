@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-###############################################################################
+################################################################################
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Vishnu K P (odoo@cybrosys.com)
+#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author: Unnimaya C O (odoo@cybrosys.com)
 #
 #    You can modify it under the terms of the GNU LESSER
 #    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
@@ -18,17 +18,20 @@
 #    (LGPL v3) along with this program.
 #    If not, see <http://www.gnu.org/licenses/>.
 #
-###############################################################################
+################################################################################
 from odoo import fields, models
 
 
 class AccountMoveLine(models.Model):
-    """Adding Product Type field to Account Move Line model."""
+    """
+    Adding Product Type field to Account Move Line model.
+    """
     _inherit = "account.move.line"
 
-    product_type = fields.Selection([('room', 'Room'), ('food', 'Food'),
-                                     ('event', 'Event'),
-                                     ('service', 'Service'),
-                                     ('fleet', 'Fleet')],
-                                    string="Product Type",
-                                    help="Choose the product type")
+    product_type = fields.Selection([
+        ('room', 'Room'),
+        ('food', 'Food'),
+        ('event', 'Event'),
+        ('service', 'Service'),
+        ('fleet', 'Fleet')
+    ], string="Product Type", help="Choose the product type")

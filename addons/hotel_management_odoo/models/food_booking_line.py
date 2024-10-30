@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-###############################################################################
+################################################################################
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Vishnu K P (odoo@cybrosys.com)
+#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author: Unnimaya C O (odoo@cybrosys.com)
 #
 #    You can modify it under the terms of the GNU LESSER
 #    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
@@ -18,7 +18,7 @@
 #    (LGPL v3) along with this program.
 #    If not, see <http://www.gnu.org/licenses/>.
 #
-###############################################################################
+################################################################################
 from odoo import api, fields, models, tools
 
 
@@ -59,29 +59,31 @@ class FoodBookingLine(models.Model):
                                help="Default taxes used when selling the food"
                                     " products.",
                                domain=[('type_tax_use', '=', 'sale')])
-    currency_id = fields.Many2one(related='booking_id.pricelist_id.currency_id'
-                                  , string="Currency",
-                                  help='The currency used')
-    price_subtotal = fields.Float(string="Subtotal",
-                                  compute='_compute_price_subtotal',
-                                  help="Total Price Excluding Tax",
-                                  store=True)
-    price_tax = fields.Float(string="Total Tax",
-                             compute='_compute_price_subtotal',
-                             help="Tax Amount",
-                             store=True)
-    price_total = fields.Float(string="Total",
-                               compute='_compute_price_subtotal',
-                               help="Total Price Including Tax",
-                               store=True)
-    state = fields.Selection(related='booking_id.state',
-                             string="Order Status",
-                             help=" Status of the Order",
-                             copy=False)
+    currency_id = fields.Many2one(
+        related='booking_id.pricelist_id.currency_id',
+        string="Currency", help='The currency used')
+    price_subtotal = fields.Float(
+        string="Subtotal",
+        compute='_compute_price_subtotal', help="Total Price Excluding Tax",
+        store=True)
+    price_tax = fields.Float(
+        string="Total Tax",
+        compute='_compute_price_subtotal', help="Tax Amount",
+        store=True)
+    price_total = fields.Float(
+        string="Total",
+        compute='_compute_price_subtotal', help="Total Price Including Tax",
+        store=True)
+    state = fields.Selection(
+        related='booking_id.state',
+        string="Order Status", help=" Status of the Order",
+        copy=False)
 
     @api.depends('uom_qty', 'price_unit', 'tax_ids')
     def _compute_price_subtotal(self):
-        """Compute the amounts of the room booking line."""
+        """
+        Compute the amounts of the room booking line.
+        """
         for line in self:
             tax_results = self.env['account.tax']._compute_taxes(
                 [line._convert_to_tax_base_line_dict()])
@@ -103,7 +105,8 @@ class FoodBookingLine(models.Model):
         """ Convert the current record to a dictionary in order to use the
         generic taxes computation method
         defined on account.tax.
-        :return: A python dictionary."""
+        :return: A python dictionary.
+        """
         self.ensure_one()
         return self.env['account.tax']._convert_to_tax_base_line_dict(
             self,
@@ -112,7 +115,8 @@ class FoodBookingLine(models.Model):
             taxes=self.tax_ids,
             price_unit=self.price_unit,
             quantity=self.uom_qty,
-            price_subtotal=self.price_subtotal, )
+            price_subtotal=self.price_subtotal,
+        )
 
     def search_food_orders(self):
         """Returns list of food orders"""

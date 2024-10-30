@@ -1,8 +1,8 @@
 ====================================
-Odoo 17 Accounting Financial Reports
+Odoo 16 Accounting Financial Reports
 ====================================
 
-This Module will provide all the financial reports for odoo 17
+This Module will provide all the financial reports for odoo 16
 community edition
 
 Installation

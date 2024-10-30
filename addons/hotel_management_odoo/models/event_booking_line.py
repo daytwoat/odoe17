@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-###############################################################################
+################################################################################
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Vishnu K P (odoo@cybrosys.com)
+#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author: Unnimaya C O (odoo@cybrosys.com)
 #
 #    You can modify it under the terms of the GNU LESSER
 #    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
@@ -18,8 +18,8 @@
 #    (LGPL v3) along with this program.
 #    If not, see <http://www.gnu.org/licenses/>.
 #
-###############################################################################
-from odoo import api, fields, models
+################################################################################
+from odoo import api, fields, models, tools
 
 
 class EventBookingLine(models.Model):
@@ -56,28 +56,38 @@ class EventBookingLine(models.Model):
                                'event_id',
                                'tax_id', related='ticket_id.taxes_id',
                                string='Taxes',
-                               help="Default taxes used when selling the event"
+                               help="Default taxes used when selling the event "
                                     "tickets.",
                                domain=[('type_tax_use', '=', 'sale')])
     currency_id = fields.Many2one(
         related='booking_id.pricelist_id.currency_id', string='Currency',
-        help='The currency used', store=True, precompute=True)
-    price_subtotal = fields.Float(string="Subtotal",
-                                  compute='_compute_price_subtotal',
-                                  help="Total Price Excluding Tax", store=True)
-    price_tax = fields.Float(string="Total Tax",
-                             compute='_compute_price_subtotal',
-                             help="Tax Amount", store=True)
-    price_total = fields.Float(string="Total",
-                               compute='_compute_price_subtotal',
-                               help="Total Price Including Tax", store=True)
-    state = fields.Selection(related='booking_id.state',
-                             string="Order Status",
-                             help="State of Room Booking", copy=False)
+        help='The currency used',
+        store=True, precompute=True)
+    price_subtotal = fields.Float(
+        string="Subtotal",
+        compute='_compute_price_subtotal',
+        help="Total Price Excluding Tax",
+        store=True)
+    price_tax = fields.Float(
+        string="Total Tax",
+        compute='_compute_price_subtotal',
+        help="Tax Amount",
+        store=True)
+    price_total = fields.Float(
+        string="Total",
+        compute='_compute_price_subtotal',
+        help="Total Price Including Tax")
+    state = fields.Selection(
+        related='booking_id.state',
+        string="Order Status",
+        help="State of Room Booking",
+        copy=False)
 
     @api.depends('uom_qty', 'price_unit', 'tax_ids')
     def _compute_price_subtotal(self):
-        """Compute the amounts of the Event booking line."""
+        """
+        Compute the amounts of the Event booking line.
+        """
         for line in self:
             tax_results = self.env['account.tax']._compute_taxes(
                 [line._convert_to_tax_base_line_dict()])

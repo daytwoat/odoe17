@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!--    Hotel Room tree view-->
     <record id="hotel_room_view_tree" model="ir.ui.view">
@@ -64,6 +64,7 @@
                                        string="Room Amenities"/>
                             </group>
                         </page>
+
                         <page string="Descriptions">
                             <separator string="Description"/>
                             <field name="description" colspan="4" nolabel="1"/>
@@ -93,3 +94,4 @@
               parent="hotel_config_menu"
               sequence="20"/>
 </odoo>
+

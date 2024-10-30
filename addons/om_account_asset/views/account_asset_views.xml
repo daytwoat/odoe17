@@ -7,14 +7,14 @@
         <field name="arch" type="xml">
             <form string="Asset">
                 <header>
-                    <button name="validate" string="Confirm" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="validate" states="draft" string="Confirm" type="object" class="oe_highlight"/>
                     <button type="object" name="compute_depreciation_board" string="Compute Depreciation"
-                            invisible="state != 'draft'"/>
-                    <button name="set_to_close" invisible="state != 'open'" string="Sell or Dispose" type="object"
+                            states="draft"/>
+                    <button name="set_to_close" states="open" string="Sell or Dispose" type="object"
                             class="oe_highlight"/>
                     <button name="set_to_draft" string="Set to Draft" type="object"
-                            invisible="entry_count != 0 or state != 'open'"/>
-                    <button name="%(action_asset_modify)d" invisible="state != 'open'" string="Modify Depreciation" type="action"/>
+                            attrs="{'invisible': ['|', ('entry_count', '!=', 0), ('state', '!=', 'open')]}"/>
+                    <button name="%(action_asset_modify)d" states="open" string="Modify Depreciation" type="action"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,open"/>
                 </header>
                 <sheet>
@@ -26,39 +26,33 @@
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only"/>
                         <h1>
-                            <field name="name" placeholder="e.g. Laptop iBook" readonly="state != 'draft'"/>
+                            <field name="name" placeholder="e.g. Laptop iBook"/>
                         </h1>
                     </div>
                     <group>
                         <group>
-                            <field name="category_id" string="Asset Category"
-                                   domain="[('type', '=', 'purchase')]"
-                                   readonly="state != 'draft'"
+                            <field name="category_id" string="Asset Category" domain="[('type', '=', 'purchase')]"
                                    context="{'default_type': 'purchase'}" help="Category of asset"/>
-                            <field name="code" readonly="state != 'draft'"/>
-                            <field name="date" help="Date of asset" readonly="state != 'draft'"/>
-                            <field name="date_first_depreciation" readonly="state != 'draft'"/>
+                            <field name="code"/>
+                            <field name="date" help="Date of asset"/>
+                            <field name="date_first_depreciation"/>
                             <field name="first_depreciation_manual_date"
-                                   readonly="state != 'draft'"
-                                   invisible="date_first_depreciation != 'manual'"
-                                   required="date_first_depreciation == 'manual'"/>
+                                   attrs="{'invisible': [('date_first_depreciation', '!=', 'manual')],
+                                           'required': [('date_first_depreciation', '=', 'manual')]}"/>
                             <field name="type" invisible="1"/>
                             <field name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
                         </group>
                         <group>
-                            <field name="currency_id" groups="base.group_multi_currency"
-                                   readonly="state != 'draft'"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
                             <field name="company_id" options="{'no_create': True}"
-                                   readonly="state != 'draft'"
                                    groups="base.group_multi_company"/>
                             <field name="value" widget="monetary"
-                                   readonly="state != 'draft'" help="Gross value of asset"/>
+                                   options="{'currency_field': 'currency_id'}" help="Gross value of asset"/>
                             <field name="salvage_value" widget="monetary"
-                                   readonly="state != 'draft'"
-                                   invisible="type == 'sale'"/>
-                            <field name="value_residual" widget="monetary"/>
+                                   options="{'currency_field': 'currency_id'}"
+                                   attrs="{'invisible': [('type','=','sale')]}"/>
+                            <field name="value_residual" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                             <field name="partner_id" string="Vendor" widget="res_partner_many2one"
-                                   readonly="state != 'draft'"
                                    context="{'res_partner_search_mode': 'supplier'}"/>
                             <field name="invoice_id" string="Invoice" options="{'no_create': True}"/>
                             <field name="analytic_distribution" widget="analytic_distribution"/>
@@ -68,9 +62,7 @@
                     </group>
                     <notebook>
                         <page string="Depreciation Board">
-                            <field name="depreciation_line_ids" mode="tree"
-                                   readonly="state not in ('draft', 'open')"
-                                   options="{'reload_whole_on_button': true}">
+                            <field name="depreciation_line_ids" mode="tree" options="{'reload_whole_on_button': true}">
                                 <tree string="Depreciation Lines" decoration-info="(move_check == False)"
                                       create="false">
                                     <field name="depreciation_date"/>
@@ -78,7 +70,7 @@
                                     <field name="depreciated_value" readonly="1"/>
                                     <field name="remaining_value" readonly="1" widget="monetary" string="Residual"/>
                                     <field name="move_check" widget="deprec_lines_toggler"
-                                           invisible="parent_state != 'open'"/>
+                                           attrs="{'invisible': [('parent_state', '!=', 'open')]}"/>
                                     <field name="move_posted_check" invisible="1"/>
                                     <field name="parent_state" invisible="1"/>
                                 </tree>
@@ -104,30 +96,21 @@
                         </page>
                         <page string="Depreciation Information">
                             <group>
-                                <field name="method" widget="radio"
-                                       invisible="type == 'sale'" readonly="state != 'draft'"/>
+                                <field name="method" widget="radio" attrs="{'invisible': [('type','=','sale')]}"/>
                                 <field name="method_progress_factor"
-                                       readonly="state != 'draft'"
-                                       invisible="method == 'linear'"
-                                       required="method == 'degressive'"/>
+                                       attrs="{'invisible':[('method','=','linear')], 'required':[('method','=','degressive')]}"/>
                                 <field name="method_time" string="Time Method Based On"
-                                       widget="radio"
-                                       readonly="state != 'draft'"
-                                       invisible="type != 'purchase'"/>
-                                <field name="prorata"
-                                       invisible="method_time == 'end'"
-                                       readonly="state != 'draft'"/>
+                                       widget="radio" attrs="{'invisible': [('type','!=','purchase')]}"/>
+                                <field name="prorata" attrs="{'invisible': [('method_time','=','end')]}"/>
                             </group>
                             <group>
                                 <field name="method_number"
-                                       readonly="state != 'draft'"
-                                       invisible="method_time == 'end'"
-                                       required="method_time == 'number'"/>
-                                <field name="method_period" readonly="state != 'draft'"/>
+                                       attrs="{'invisible':[('method_time','=','end')],
+                                               'required':[('method_time','=','number')]}"/>
+                                <field name="method_period"/>
                                 <field name="method_end"
-                                       readonly="state != 'draft'"
-                                       invisible="method_time == 'end'"
-                                       required="method_time == 'number'"/>
+                                       attrs="{'required': [('method_time','=','end')],
+                                               'invisible':[('method_time','=','number')]}"/>
                             </group>
                         </page>
                     </notebook>

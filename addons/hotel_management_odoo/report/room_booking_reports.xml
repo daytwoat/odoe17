@@ -39,7 +39,7 @@
                                     <t t-esc="line['partner_id']"/>
                                 </td>
                                 <td>
-                                    <t t-esc="line['room_id']"/>
+                                    <t t-esc="line['room']"/>
                                 </td>
                                 <td>
                                     <t t-esc="line['checkin_date']"/>

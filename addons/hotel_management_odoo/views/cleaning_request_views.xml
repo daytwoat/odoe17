@@ -22,32 +22,29 @@
                 <header>
                     <button name="action_assign_cleaning" string="Assign To"
                             groups="hotel_management_odoo.cleaning_team_group_head"
-                            invisible="state != 'draft'" type="object"
+                            states="draft" type="object"
                             class="btn-primary"/>
                     <button name="action_start_cleaning" string="Start"
-                            type="object"
-                            invisible="state != 'assign'"
+                            states="assign" type="object"
                             class="btn-primary"/>
                     <button name="action_done_cleaning" string="Completed"
-                            invisible="state != 'ongoing'"
-                            type="object"
+                            states="ongoing" type="object"
                             class="btn-primary"/>
                     <button name="action_maintain_request"
-                            string="Maintain Request"
-                            invisible="state != 'ongoing'"
+                            string="Maintain Request" states="ongoing"
                             type="object"
                             class="btn-primary"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="draft,ongoing,done"/>
                     <button name="action_assign_support"
                             string="Request Support"
-                            invisible="state != 'ongoing'" type="object"
+                            states="ongoing" type="object"
                             groups="hotel_management_odoo.cleaning_team_group_user"
                             class="btn-primary"/>
                     <button name="action_assign_assign_support"
                             string="Assign Support"
                             groups="hotel_management_odoo.cleaning_team_group_head"
-                            invisible="state != 'support'" type="object"
+                            states="support" type="object"
                             class="btn-primary"/>
                 </header>
                 <sheet>
@@ -59,15 +56,18 @@
                             <field name="team_id"/>
                             <field name="cleaning_type"/>
                             <field name="room_id"
-                                   invisible="cleaning_type != 'room' "/>
+                                   attrs="{'invisible': [('cleaning_type',
+                                   '!=','room')]}"/>
                             <field name="hotel"
-                                   invisible="cleaning_type != 'hotel' "/>
+                                   attrs="{'invisible': [('cleaning_type',
+                                   '!=','hotel')]}"/>
                             <field name="vehicle_id"
-                                   invisible="cleaning_type != 'vehicle' "/>
+                                   attrs="{'invisible': [('cleaning_type',
+                                   '!=','vehicle')]}"/>
                         </group>
                         <group>
                             <field name="head_id"/>
-                              <field name="team_member_ids" invisible="1"/>
+                             <field name="team_member_ids" invisible="1"/>
                             <field name="assigned_id"
                                    domain="[('id','in',team_member_ids)]"
                                    options="{'no_create': True}"/>
@@ -75,11 +75,13 @@
                                    widget="many2many_tags"
                                    domain="[('id', 'in',team_member_ids),
                                    ('id', '!=', assigned_id)]"
-                                   invisible=" state not in ['support']"
+                                   attrs="{'invisible':[('state', 'not in',
+                                   'support')]}"
                                    groups="hotel_management_odoo.cleaning_team_group_head"
                                    options="{'no_create': True}"/>
                             <field name="support_reason"
-                                   invisible="state not in ['ongoing']"/>
+                                   attrs="{'invisible':[('state', 'not in',
+                                   'ongoing')]}"/>
                         </group>
                     </group>
                 </sheet>

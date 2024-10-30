@@ -1,8 +1,8 @@
 ==================
-Odoo 17 Accounting
+Odoo 16 Accounting
 ==================
 
-This Module will adds following accounting features to Odoo 17 community edition:
+This Module will adds following accounting features to Odoo 16 community edition:
 Financial Reports, Asset Management, Budget Management, Bank Statement Import,
 Daily Reports, Customer Follow Ups and Recurring Payments
 
@@ -45,7 +45,6 @@ Contributors
 ------------
 
 * Odoo Mates <odoomates@gmail.com>
-* Walnut Software Solutions <info@walnutit.com>
 
 
 Author & Maintainer

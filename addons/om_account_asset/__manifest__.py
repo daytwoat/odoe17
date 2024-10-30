@@ -2,13 +2,13 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 {
-    'name': 'Odoo 17 Assets Management',
-    'version': '17.0.1.0.3',
+    'name': 'Odoo 16 Assets Management',
+    'version': '16.0.1.3.0',
     'author': 'Odoo Mates, Odoo SA',
     'depends': ['account'],
     'description': """Manage assets owned by a company or a person. 
         Keeps track of depreciation's, and creates corresponding journal entries""",
-    'summary': 'Odoo 17 Assets Management',
+    'summary': 'Odoo 16 Assets Management',
     'category': 'Accounting',
     'sequence': 10,
     'website': 'https://www.odoomates.tech',
@@ -30,6 +30,10 @@
     'assets': {
         'web.assets_backend': [
             'om_account_asset/static/src/scss/account_asset.scss',
+            'om_account_asset/static/src/js/account_asset.js',
+        ],
+        'web.qunit_suite_tests': [
+            ('after', 'web/static/tests/legacy/views/kanban_tests.js', '/om_account_asset/static/tests/account_asset_tests.js'),
         ],
     },
 }

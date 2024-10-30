@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-###############################################################################
+################################################################################
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Vishnu K P (odoo@cybrosys.com)
+#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author: Unnimaya C O (odoo@cybrosys.com)
 #
 #    You can modify it under the terms of the GNU LESSER
 #    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
@@ -18,7 +18,7 @@
 #    (LGPL v3) along with this program.
 #    If not, see <http://www.gnu.org/licenses/>.
 #
-###############################################################################
+################################################################################
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError
 
@@ -46,10 +46,10 @@ class HotelRoom(models.Model):
                                    help="Check if the room is available")
     list_price = fields.Float(string='Rent', digits='Product Price',
                               help="The rent of the room.")
-    uom_id = fields.Many2one('uom.uom', string='Unit of Measure',
-                             default=_get_default_uom_id, required=True,
-                             help="Default unit of measure used for all stock"
-                                  " operations.")
+    uom_id = fields.Many2one(
+        'uom.uom', string='Unit of Measure',
+        default=_get_default_uom_id, required=True,
+        help="Default unit of measure used for all stock operations.")
     room_image = fields.Image(string="Room Image", max_width=1920,
                               max_height=1920, help='Image of the room')
     taxes_ids = fields.Many2many('account.tax',
@@ -93,9 +93,11 @@ class HotelRoom(models.Model):
 
     @api.onchange("room_type")
     def _onchange_room_type(self):
-        """Based on selected room type, number of person will be updated.
+        """
+        Based on selected room type, number of person will be updated.
         ----------------------------------------
-        @param self: object pointer"""
+        @param self: object pointer
+        """
         if self.room_type == "single":
             self.num_person = 1
         elif self.room_type == "double":

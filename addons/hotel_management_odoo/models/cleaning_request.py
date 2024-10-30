@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-###############################################################################
+################################################################################
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Vishnu K P (odoo@cybrosys.com)
+#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author: Unnimaya C O (odoo@cybrosys.com)
 #
 #    You can modify it under the terms of the GNU LESSER
 #    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
@@ -18,7 +18,7 @@
 #    (LGPL v3) along with this program.
 #    If not, see <http://www.gnu.org/licenses/>.
 #
-###############################################################################
+################################################################################
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
@@ -47,7 +47,7 @@ class CleaningRequest(models.Model):
                                      string="Cleaning Type",
                                      help="Choose what is to be cleaned")
     room_id = fields.Many2one('hotel.room', string="Room",
-                              help="Choose the room")
+                              help="Choose the room", required=True)
     hotel = fields.Char(string="Hotel", help="Cleaning request space in hotel")
     vehicle_id = fields.Many2one('fleet.vehicle.model',
                                  string="Vehicle",
@@ -66,7 +66,7 @@ class CleaningRequest(models.Model):
                               related='team_id.team_head_id',
                               help="Head of cleaning team")
     assigned_id = fields.Many2one('res.users', string="Assigned To",
-                                  help="The team member to whom the request is"
+                                  help="The team member to whom the request is "
                                        "Assigned To")
     team_member_ids = fields.Many2many('res.users', compute='_compute_team_member_ids', store=False,
                                        help='For filtering Users')

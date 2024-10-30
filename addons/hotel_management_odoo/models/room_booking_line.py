@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-###############################################################################
+################################################################################
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Vishnu K P (odoo@cybrosys.com)
+#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author: Unnimaya C O (odoo@cybrosys.com)
 #
 #    You can modify it under the terms of the GNU LESSER
 #    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
@@ -18,7 +18,7 @@
 #    (LGPL v3) along with this program.
 #    If not, see <http://www.gnu.org/licenses/>.
 #
-###############################################################################
+################################################################################
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError
 
@@ -45,7 +45,7 @@ class RoomBookingLine(models.Model):
                                          " Otherwise sets to current Date",
                                     required=True)
     room_id = fields.Many2one('hotel.room', string="Room",
-
+                              domain=[('status', '=', 'available')],
                               help="Indicates the Room",
                               required=True)
     uom_qty = fields.Float(string="Duration",
@@ -64,38 +64,40 @@ class RoomBookingLine(models.Model):
                                'room_id', 'tax_id',
                                related='room_id.taxes_ids',
                                string='Taxes',
-                               help="Default taxes used when selling the room."
-                               , domain=[('type_tax_use', '=', 'sale')])
+                               help="Default taxes used when selling the room.",
+                               domain=[('type_tax_use', '=', 'sale')])
     currency_id = fields.Many2one(string='Currency',
-                                  related='booking_id.pricelist_id.currency_id'
-                                  , help='The currency used')
-    price_subtotal = fields.Float(string="Subtotal",
-                                  compute='_compute_price_subtotal',
-                                  help="Total Price excluding Tax",
-                                  store=True)
-    price_tax = fields.Float(string="Total Tax",
-                             compute='_compute_price_subtotal',
-                             help="Tax Amount",
-                             store=True)
-    price_total = fields.Float(string="Total",
-                               compute='_compute_price_subtotal',
-                               help="Total Price including Tax",
-                               store=True)
-    state = fields.Selection(related='booking_id.state',
-                             string="Order Status",
-                             help=" Status of the Order",
-                             copy=False)
+                                  related='booking_id.pricelist_id.currency_id',
+                                  help='The currency used')
+    price_subtotal = fields.Float(
+        string="Subtotal",
+        compute='_compute_price_subtotal', help="Total Price excluding Tax",
+        store=True)
+    price_tax = fields.Float(
+        string="Total Tax",
+        compute='_compute_price_subtotal', help="Tax Amount",
+        store=True)
+    price_total = fields.Float(
+        string="Total",
+        compute='_compute_price_subtotal', help="Total Price including Tax",
+        store=True)
+    state = fields.Selection(
+        related='booking_id.state',
+        string="Order Status", help=" Status of the Order",
+        copy=False, precompute=True)
     booking_line_visible = fields.Boolean(default=False,
                                           string="Booking Line Visible",
-                                          help="If True, then Booking Line "
-                                               "will be visible")
+                                          help="If True, then Booking Line will"
+                                               " be visible")
 
     @api.onchange("checkin_date", "checkout_date")
     def _onchange_checkin_date(self):
-        """When you change checkin_date or checkout_date it will check
+        """
+        When you change checkin_date or checkout_date it will check
         and update the qty of hotel service line
         -----------------------------------------------------------------
-        @param self: object pointer"""
+        @param self: object pointer
+        """
         if self.checkout_date < self.checkin_date:
             raise ValidationError(
                 _("Checkout must be greater or equal checkin date"))
@@ -108,7 +110,9 @@ class RoomBookingLine(models.Model):
 
     @api.depends('uom_qty', 'price_unit', 'tax_ids')
     def _compute_price_subtotal(self):
-        """Compute the amounts of the room booking line."""
+        """
+        Compute the amounts of the room booking line.
+        """
         for line in self:
             tax_results = self.env['account.tax']._compute_taxes(
                 [line._convert_to_tax_base_line_dict()])
@@ -130,7 +134,9 @@ class RoomBookingLine(models.Model):
         """ Convert the current record to a dictionary in order to use the
         generic taxes computation method
         defined on account.tax.
-        :return: A python dictionary."""
+
+        :return: A python dictionary.
+        """
         self.ensure_one()
         return self.env['account.tax']._convert_to_tax_base_line_dict(
             self,
@@ -141,29 +147,3 @@ class RoomBookingLine(models.Model):
             quantity=self.uom_qty,
             price_subtotal=self.price_subtotal,
         )
-
-    @api.onchange('checkin_date', 'checkout_date', 'room_id')
-    def onchange_checkin_date(self):
-        records = self.env['room.booking'].search(
-            [('state', 'in', ['reserved', 'check_in'])])
-        for rec in records:
-            rec_room_id = rec.room_line_ids.room_id
-            rec_checkin_date = rec.room_line_ids.checkin_date
-            rec_checkout_date = rec.room_line_ids.checkout_date
-
-            if rec_room_id and rec_checkin_date and rec_checkout_date:
-                # Check for conflicts with existing room lines
-                for line in self:
-                    if line.id != rec.id and line.room_id == rec_room_id:
-                        # Check if the dates overlap
-                        if (rec_checkin_date <= line.checkin_date <= rec_checkout_date or
-                                rec_checkin_date <= line.checkout_date <= rec_checkout_date):
-                            raise ValidationError(
-                                _("Sorry, You cannot create a reservation for "
-                                  "this date since it overlaps with another "
-                                  "reservation..!!"))
-                        if rec_checkout_date <= line.checkout_date and rec_checkin_date >= line.checkin_date:
-                            raise ValidationError(
-                                "Sorry You cannot create a reservation for this"
-                                "date due to an existing reservation between "
-                                "this date")

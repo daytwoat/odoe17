@@ -21,7 +21,7 @@ Company
 
 Credits
 -------
-* Developer:(V17) Vishnu KP, Contact: odoo@cybrosys.com
+* Developer:(V16) Unnimaya C O, Contact: odoo@cybrosys.com
 
 Contacts
 --------

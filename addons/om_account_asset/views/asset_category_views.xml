@@ -9,9 +9,9 @@
                 <sheet>
                     <div class="oe_title">
                         <label for="name" string="Asset Type" class="oe_edit_only"
-                                invisible="type != 'purchase'"/>
+                               attrs="{'invisible': [('type','!=','purchase')]}"/>
                         <label for="name" string="Deferred Revenue Type" class="oe_edit_only"
-                               invisible="type == 'purchase'"/>
+                               attrs="{'invisible': [('type','==','purchase')]}"/>
                         <h1>
                             <field name="name" placeholder="e.g. Computers"/>
                         </h1>
@@ -20,19 +20,19 @@
                         <group>
                             <field name="journal_id"/>
                             <div>
-                                <label for="account_asset_id"  invisible="type != 'purchase'"
+                                <label for="account_asset_id" attrs="{'invisible': [('type','!=','purchase')]}"
                                        style="font-weight: bold" class="o_light_label"/>
                                 <label for="account_asset_id" string="Deferred Revenue Account"
-                                       invisible="type != 'sale'" style="font-weight: bold"
+                                       attrs="{'invisible': [('type','!=','sale')]}" style="font-weight: bold"
                                        class="o_light_label"/>
                             </div>
                             <field name="account_asset_id" nolabel="1"
                                    domain="[('company_id', '=', company_id)]"/>
                             <div>
-                                <label for="account_depreciation_id"  invisible="type != 'purchase'"
+                                <label for="account_depreciation_id" attrs="{'invisible': [('type','!=','purchase')]}"
                                        style="font-weight: bold" class="o_light_label"/>
                                 <label for="account_depreciation_id" string="Recognition Income Account"
-                                       invisible="type != 'sale'"
+                                       attrs="{'invisible': [('type','!=','sale')]}"
                                        style="font-weight: bold" class="o_light_label"/>
                             </div>
                             <field name="account_depreciation_id" nolabel="1"
@@ -41,10 +41,10 @@
                         <group>
                             <div>
                                 <label for="account_depreciation_expense_id"
-                                       invisible="type != 'purchase'"
+                                       attrs="{'invisible': [('type','!=','purchase')]}"
                                        style="font-weight: bold" class="o_light_label"/>
                                 <label for="account_depreciation_expense_id" string="Recognition Account"
-                                       invisible="type != 'sale'"
+                                       attrs="{'invisible': [('type','!=','sale')]}"
                                        style="font-weight: bold" class="o_light_label"/>
                             </div>
                             <field name="account_depreciation_expense_id" nolabel="1"
@@ -57,19 +57,18 @@
                     <group>
                         <group string="Periodicity">
                             <field name="method_time" string="Time Method Based On" widget="radio"
-                                    invisible="type != 'purchase'"/>
+                                   attrs="{'invisible': [('type','!=','purchase')]}"/>
                             <field name="method_number" string="Number of Entries"
-                                   required="method_time == 'number'"
-                                   invisible="method_time != 'number' or type == False"/>
+                                   attrs="{'invisible':['|',('method_time','!=','number'), ('type','=', False)],
+                                    'required':[('method_time','=','number')]}"/>
                             <label for="method_period" string="One Entry Every"/>
                             <div>
                                 <field name="method_period" nolabel="1"
-                                       invisible="type == False" class="oe_inline"/>
+                                       attrs="{'invisible': [('type','=', False)]}" class="oe_inline"/>
                                 months
                             </div>
                             <field name="method_end"
-                                   required="method_time == 'end'"
-                                   invisible="method_time != 'end'"/>
+                                   attrs="{'required': [('method_time','=','end')], 'invisible':[('method_time','!=','end')]}"/>
                         </group>
                         <group>
                             <field name="type" invisible="1"/>
@@ -82,11 +81,11 @@
                             <field name="group_entries"/>
                             <field name="date_first_depreciation"/>
                         </group>
-                        <group invisible="type == 'sale'" string="Depreciation Method">
+                        <group attrs="{'invisible': [('type','=','sale')]}" string="Depreciation Method">
                             <field name="method" widget="radio"/>
                             <field name="method_progress_factor"
-                                   invisible="method_time == 'linear'" required="method == 'degressive'"/>
-                            <field name="prorata" invisible="method_time == 'end'"/>
+                                   attrs="{'invisible':[('method','=','linear')], 'required':[('method','=','degressive')]}"/>
+                            <field name="prorata" attrs="{'invisible': [('method_time','=','end')]}"/>
                         </group>
                     </group>
                 </sheet>

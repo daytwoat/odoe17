@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-###############################################################################
+################################################################################
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Vishnu K P (odoo@cybrosys.com)
+#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author: Unnimaya C O (odoo@cybrosys.com)
 #
 #    You can modify it under the terms of the GNU LESSER
 #    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
@@ -18,7 +18,7 @@
 #    (LGPL v3) along with this program.
 #    If not, see <http://www.gnu.org/licenses/>.
 #
-###############################################################################
+################################################################################
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
@@ -32,9 +32,8 @@ class MaintenanceRequest(models.Model):
     _description = "Maintenance Request"
 
     sequence = fields.Char(readonly=True, string="Sequence", copy=False,
-                           default='New', help='Sequence number for'
-                                               ' identifying maintenance'
-                                               ' request')
+                           default='New', help='Sequence number for identifying'
+                                               ' maintenance request')
     date = fields.Date(string="Date", help="Date of maintenance request",
                        default=fields.Date.today)
     state = fields.Selection(selection=[('draft', 'Draft'),
@@ -70,7 +69,7 @@ class MaintenanceRequest(models.Model):
                             help="The type for which the request is creating",
                             tracking=True)
     room_maintenance_ids = fields.Many2many('hotel.room',
-                                            string="Room Maintenance",
+                                            string="Room Maintenance", required=True,
                                             help="Choose Room Maintenance")
     hotel_maintenance = fields.Char(string='Hotel Maintenance',
                                     help="This is the Hotel Maintenance")

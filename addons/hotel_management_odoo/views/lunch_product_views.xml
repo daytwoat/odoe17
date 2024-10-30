@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!--    Products menu action-->
+     <!--    Products menu action-->
     <record id="lunch_product_action" model="ir.actions.act_window">
         <field name="name">Products</field>
         <field name="res_model">lunch.product</field>
         <field name="view_mode">tree,kanban,form</field>
     </record>
-    <!--    Vendors menu action-->
+       <!--    Vendors menu action-->
     <record id="lunch_supplier_action" model="ir.actions.act_window">
         <field name="name">Vendors</field>
         <field name="res_model">lunch.supplier</field>
         <field name="view_mode">kanban,tree,form</field>
     </record>
-    <!--    Products Menu-->
+     <!--    Products Menu-->
     <menuitem id="lunch_product_menu"
               name="Products"
               action="lunch_product_action"
